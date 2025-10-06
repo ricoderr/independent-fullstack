@@ -35,8 +35,14 @@ class MyHandler(BaseHTTPRequestHandler):
             self._set_headers()
             self.wfile.write(json_data.encode())
         else: 
-            self._set_headers(status=200, content_type='text/html')
-            self.wfile.write(b"<h1>Sorry! No Page Found :( </h1>")
+            data = {
+                "name": "-",
+                "message": "Page Not Found!",
+                "status": "Failed"
+            } 
+            json_data = json.dumps(data)
+            self._set_headers()
+            self.wfile.write(json_data.encode())
 
 server_address = ('', 8000)
 httpd = HTTPServer(server_address, MyHandler)

@@ -1,4 +1,4 @@
-import Fetch from './FetchingAPIs/Fetch.js'; 
+import Fetch from '../FetchingAPIs/Fetch.js'; 
 const Response_Name = document.querySelector(".response_name");
 const Response_Message = document.querySelector(".response_message");
 const Response_Status = document.querySelector(".response_status");
@@ -18,6 +18,7 @@ form.addEventListener('submit', async (event) => {
   }
   const data_fetcher = new Fetch(urlPath); 
   const data = await data_fetcher.getData(); 
+  console.log(data); 
   
   Response_Name.innerHTML = data.name;
   Response_Message.innerHTML = data.message;
