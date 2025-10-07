@@ -24,4 +24,26 @@ export default class Fetch{
         }
         
     }
+    async postData(body = {}) {
+    try {
+        const response = await fetch(`${this.BASE_URL}${this.url}`, {
+            method: "POST", 
+            headers: {
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Error posting data :(", error);
+    }
+}
+
 }; 
