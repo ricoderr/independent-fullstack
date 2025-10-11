@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from DB.User import InsertUser, SelectUser
 
 class MyHandler(BaseHTTPRequestHandler): 
 
@@ -47,8 +48,10 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_POST(self): 
         if self.path == '/post': 
             content_lenth = int(self.headers['content-length'])
-            data = self.rfile.read(content_lenth)
-            print(data)
+            data_byte = self.rfile.read(content_lenth)
+            data_str = data_byte.decode('utf-8')
+            data = json.loads(data_str)
+            InsertUser(username=data["username"], email=data["email"])
             
             
             # response to the post.
@@ -60,19 +63,12 @@ class MyHandler(BaseHTTPRequestHandler):
             json_response_data = json.dumps(response_data)
             self._set_headers()
             self.wfile.write(json_response_data.encode())
-
-# server_address = ('', 8000)
-# httpd = HTTPServer(server_address, MyHandler)
-# print('''
-#        -----------------------------------------------------------------------------
-#       | NOTE: This is just an development server which is not ready for deployment. |
-#        -----------------------------------------------------------------------------
-#                                              -----------------------
-#                    R I J A N's server -->   | http://localhost:8000 | 
-#                                              -----------------------
-#       ''')
-# httpd.serve_forever()
-
+            
+            
+            
+            
+            
+            
 if __name__ == "__main__":
     try:
         server = HTTPServer(("localhost", 8000), MyHandler)
