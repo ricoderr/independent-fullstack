@@ -45,7 +45,7 @@ def InsertUser(username: str, email: str, password: str) -> None:
      
 def SelectUser(email: str) -> tuple | None:
     with engine.connect() as connection:  
-        query = sa.select().where(user_table.c.email == email)
+        query = sa.select(user_table).where(user_table.c.email == email)
         result = connection.execute(query)
         return result.mappings().fetchone()
 
@@ -61,6 +61,11 @@ def GetAllUsers() -> list[dict]:
         result = connection.execute(query)
         return result.mappings().all() 
 
+def UpdateSessionId(id: int, sessionid: str) -> None: 
+    with engine.connect() as connection: 
+        query = sa.update(user_table).where(user_table.c.id == id).values(sessionid = sessionid)
+        connection.execute(query)
+        
 def RemoveUser(id: int) -> None : 
     with engine.connect() as connection: 
         query = user_table.delete().where(user_table.c.id == id)
@@ -69,7 +74,6 @@ def RemoveUser(id: int) -> None :
     
 def main() -> None: 
     # This create the db or updates if it is already present.
-    metadata.drop_all(engine) 
     metadata.create_all(engine)
     
     # This is how a user is Inserted: 
@@ -83,9 +87,7 @@ def main() -> None:
     #     RemoveUser(i)
         
     # Ths GETs all the users(rows in user_table) in the db
-    InsertUser("Rijan", "rijangautam07@gmail.com", "fdadfeisdfn342kfsadfer")
     print(GetAllUsers())
-    print(SelectUser("rijangautam07@gmail.com"))
     
 
 

@@ -3,18 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Signup</title>
+  <title>Login</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main>
-    <h1>Sign Up</h1>
-    <form action="POST">
-      <label for="username">
-        <span>Username:</span>
-        <input type="text" id="username" name="username" placeholder="Enter your username">
-      </label>
-
+    <h1>Login</h1>
+    <form method="post">
       <label for="email">
         <span>Email:</span>
         <input type="email" id="email" name="email" placeholder="Enter your email">
@@ -25,14 +20,10 @@
         <input type="password" id="password" name="password" placeholder="Enter password">
       </label>
 
-      <label for="Cpassword">
-        <span>Confirm Password:</span>
-        <input type="password" id="Cpassword" name="Cpassword" placeholder="Confirm password">
-      </label>
-
-      <button class="signup-button" type="submit">Sign Up</button>
+      <button class="login-button" type="submit">Login</button>
     </form>
+     <p signup-director-container>Don't have an account? <a href="/authentication//signup/index.html" class="signup-director">Sign Up</a></p>
   </main>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

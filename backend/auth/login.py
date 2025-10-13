@@ -1,5 +1,6 @@
-from DB.models.User import CheckUser, SelectUser
+from DB.models.User import CheckUser, SelectUser, UpdateSessionId
 from passlib.hash import argon2
+import secrets
 def handle_login(data): 
     email = data["email"]
     password = data["password"] 
@@ -10,6 +11,8 @@ def handle_login(data):
             user_pass = user_data["password"]
             authenticated = argon2.verify(password, user_pass)
             if authenticated: 
+                sessionid = secrets.token_hex(16)
+                UpdateSessionId(user_data["id"], sessionid=sessionid)
                 return {
                     "method": "POST", 
                     "status": "Success",
@@ -17,7 +20,7 @@ def handle_login(data):
                     "user_data": {
                         "username": user_data["username"],
                         "email": user_data["email"],
-                        "sessionid": user_data["sessionid"]
+                        "sessionid": sessionid,
                     }
                 }
             else: 
