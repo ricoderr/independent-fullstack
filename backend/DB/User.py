@@ -20,9 +20,9 @@ def InsertUser(username: str, email: str) -> None:
         connection.commit()
         
      
-def SelectUser(username: str) -> tuple | None:
+def SelectUser(id: int) -> tuple | None:
     with engine.connect() as connection:  
-        query = user_table.select().where(user_table.c.username == username)
+        query = user_table.select().where(user_table.c.id == id)
         result = connection.execute(query)
         return result.mappings().fetchone()
     

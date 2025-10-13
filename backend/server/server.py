@@ -52,6 +52,8 @@ class MyHandler(BaseHTTPRequestHandler):
             data_str = data_byte.decode('utf-8')
             data = json.loads(data_str)
             InsertUser(username=data["username"], email=data["email"])
+            username = data["username"]
+            print(f"User inserted : {username}")
             
             
             # response to the post.
@@ -63,11 +65,6 @@ class MyHandler(BaseHTTPRequestHandler):
             json_response_data = json.dumps(response_data)
             self._set_headers()
             self.wfile.write(json_response_data.encode())
-            
-            
-            
-            
-            
             
 if __name__ == "__main__":
     try:
@@ -83,6 +80,7 @@ if __name__ == "__main__":
        Press 'Ctrl + C' to Stop the server. 
       ''')
         server.serve_forever()
+        
     except KeyboardInterrupt:
         print("Server Stopped.")
         server.server_close()
