@@ -45,7 +45,7 @@ def InsertUser(username: str, email: str, password: str) -> None:
      
 def SelectUser(email: str) -> tuple | None:
     with engine.connect() as connection:  
-        query = sa.select(user_table.c.username, user_table.c.email, user_table.c.sessionid).where(user_table.c.email == email)
+        query = sa.select().where(user_table.c.email == email)
         result = connection.execute(query)
         return result.mappings().fetchone()
 
