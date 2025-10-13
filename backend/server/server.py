@@ -1,6 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from DB.User import InsertUser, SelectUser
+from auth.signup import handle_signup
+from auth.login import handle_login
 
 class MyHandler(BaseHTTPRequestHandler): 
 
@@ -45,26 +47,26 @@ class MyHandler(BaseHTTPRequestHandler):
             self._set_headers()
             self.wfile.write(json_data.encode())
     
+    
+    
     def do_POST(self): 
-        if self.path == '/post': 
-            content_lenth = int(self.headers['content-length'])
-            data_byte = self.rfile.read(content_lenth)
-            data_str = data_byte.decode('utf-8')
-            data = json.loads(data_str)
-            InsertUser(username=data["username"], email=data["email"])
-            username = data["username"]
-            print(f"User inserted : {username}")
+        content_length = int(self.headers['content-length'])
+        body = self.rfile.read(content_length)
+        data = json.loads(body.decode('utf-8'))
+        
+        if self.path == '/auth/signup': 
+            response = handle_signup(data)
+        
+        elif self.path == '/auth/login': 
+            response = handle_login(data)
+            
+        json_response_data = json.dumps(response)
+        self._set_headers()
+        self.wfile.write(json_response_data.encode())
             
             
-            # response to the post.
-            response_data = {
-                "method": "POST", 
-                "status": "Success" 
-            }
             
-            json_response_data = json.dumps(response_data)
-            self._set_headers()
-            self.wfile.write(json_response_data.encode())
+            
             
 if __name__ == "__main__":
     try:

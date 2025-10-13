@@ -1,4 +1,5 @@
-import sqlalchemy as sa 
+import sqlalchemy as sa
+from sqlalchemy.exc import IntegrityError
 
 engine = sa.create_engine("sqlite:///sqlite.db")
 metadata = sa.MetaData()
@@ -10,14 +11,35 @@ user_table = sa.Table(
     sa.Column("id", sa.Integer, primary_key=True), 
     sa.Column("username", sa.String), 
     sa.Column("email", sa.String), 
+    sa.Column("password", sa.String)
 )
 
 
-def InsertUser(username: str, email: str) -> None:
-    with engine.connect() as connection: 
-        query = user_table.insert().values(username = username, email= email)
-        connection.execute(query)
-        connection.commit()
+def InsertUser(username: str, email: str, password: str) -> None:
+    try: 
+        with engine.connect() as connection: 
+            query = user_table.insert().values(username = username, email= email, password = password)
+            connection.execute(query)
+            connection.commit()
+            return {
+            "method": "POST", 
+            "status": "Success",
+            "message": f"User {username} created successfully!",
+            }
+            
+    except IntegrityError: 
+        return {
+            "method": "POST",
+            "status": "Failed",
+            "message": "User already exists!",
+        }
+        
+    except Exception: 
+        return{
+            "method": "POST", 
+            "status": "Failed",
+            "message": "Unknown error occured!"
+        }
         
      
 def SelectUser(id: int) -> tuple | None:
@@ -49,6 +71,10 @@ def main() -> None:
     # This select a particular user with their id: 
     #------> print(SelectUser(1))
     
+    # This removes all the users. 
+    for i in range(1,6): 
+        RemoveUser(i)
+        
     # Ths GETs all the users(rows in user_table) in the db
     print(GetAllUsers())
     

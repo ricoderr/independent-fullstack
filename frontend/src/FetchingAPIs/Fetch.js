@@ -2,9 +2,9 @@ export default class Fetch{
     constructor(url){
         this.url = url
         this.BASE_URL = 'http://localhost:8000'
+        try {
     }
     async getData(){
-        try {
             const response = await fetch(`${this.BASE_URL}${this.url}`, {
                 method : "Get",
                 headers: {
