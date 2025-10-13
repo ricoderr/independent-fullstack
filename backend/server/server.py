@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from DB.User import InsertUser, SelectUser
+from DB.models.User import InsertUser, SelectUser
 from auth.signup import handle_signup
 from auth.login import handle_login
 
