@@ -1,4 +1,4 @@
-import Fetch from '../../FetchingAPIs/Fetch.js'; 
+import Fetch from '../../../utils/Fetch.js'; 
 const Response_Name = document.querySelector(".response_name");
 const Response_Message = document.querySelector(".response_message");
 const Response_Status = document.querySelector(".response_status");

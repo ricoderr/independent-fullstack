@@ -1,4 +1,4 @@
-import Fetch from "../../FetchingAPIs/Fetch.js"
+import Fetch from "../../../utils/Fetch.js"
 
 const form = document.querySelector("form");
 

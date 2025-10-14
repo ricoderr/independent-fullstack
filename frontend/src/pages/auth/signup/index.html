@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Sign Up</h1>
+    <form method="post">
+      <label for="username">
+        <span>Username:</span>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+      </label>
+
+      <label for="email">
+        <span>Email:</span>
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+      </label>
+
+      <label for="password">
+        <span>Password:</span>
+        <input type="password" id="password" name="password" placeholder="Enter password">
+      </label>
+
+      <label for="Cpassword">
+        <span>Confirm Password:</span>
+        <input type="password" id="Cpassword" name="Cpassword" placeholder="Confirm password">
+      </label>
+
+      <button class="signup-button" type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="/src/pages/auth/login/"  class="login-director">Log In</a></p>
+  </main>
+  <script src="script.js" type="module"></script>
+</body>
+</html>
