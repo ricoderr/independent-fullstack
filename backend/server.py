@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.cookies import SimpleCookie
 import json
 from DB.models.User import InsertUser, SelectUser
 from auth.signup import handle_signup
@@ -10,9 +11,10 @@ class MyHandler(BaseHTTPRequestHandler):
     def _set_headers(self, status=200, content_type='application/json'):
         self.send_response(status)
         self.send_header('Content-type', content_type)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Credentials", "true")
         self.end_headers()
 
     def do_OPTIONS(self):
@@ -51,23 +53,35 @@ class MyHandler(BaseHTTPRequestHandler):
     
     
     def do_POST(self): 
-        content_length = int(self.headers['content-length'])
+        content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
-        data = json.loads(body.decode('utf-8'))
-        
+        data = json.loads(body.decode('utf-8')) if body else {}
+
+        response = {}
+
         if self.path == '/auth/signup': 
             response = handle_signup(data)
-        
+
         elif self.path == '/auth/login': 
             response = handle_login(data)
-        
+
         elif self.path == '/validate-session': 
-            response = handle_validation(data)
-            
+            cookie = SimpleCookie()
+            cookie.load(self.headers.get("Cookie", ""))
+            session_morsel = cookie.get("sessionid")
+            sessionid = session_morsel.value if session_morsel else None
+
+            response = handle_validation(sessionid)
+
         json_response_data = json.dumps(response)
+
+        # Send headers first
         self._set_headers()
-        self.wfile.write(json_response_data.encode())
-            
+        try:
+            self.wfile.write(json_response_data.encode())
+        except ConnectionAbortedError:
+            print("Client closed the connection early. Skipping response.")
+
             
             
             

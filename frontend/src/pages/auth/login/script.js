@@ -34,5 +34,6 @@ form.addEventListener("submit", async (e) => {
 
 
   alert(resp["message"]);
+  window.location.replace('/'); 
   form.reset();
 });

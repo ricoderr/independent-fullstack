@@ -25,9 +25,9 @@ export default class Fetch {
     try {
       const response = await fetch(`${this.BASE_URL}${this.url}`, {
         method: "POST",
+        credentials: credentials, 
         headers: {
           "Content-Type": "application/json",
-          "credentials": credentials, 
         },
         body: JSON.stringify(body),
       });

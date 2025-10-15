@@ -1,29 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main>
-    <h1>Login</h1>
-    <form method="post">
-      <label for="email">
-        <span>Email:</span>
-        <input type="email" id="email" name="email" placeholder="Enter your email">
-      </label>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-      <label for="password">
-        <span>Password:</span>
-        <input type="password" id="password" name="password" placeholder="Enter password">
-      </label>
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #0a0a0a;
+        color: #ffffff;
+      }
 
-      <button class="login-button" type="submit">Login</button>
-    </form>
-     <p signup-director-container>Don't have an account? <a href="/src/pages/auth/signup/" class="signup-director">Sign Up</a></p>
-  </main>
-  <script type="module" src="script.js"></script>
-</body>
+      main {
+        background: #121212;
+        padding: 40px 30px;
+        border-radius: 12px;
+        width: 350px;
+        box-shadow: 0 6px 18px rgba(255, 255, 255, 0.15);
+      }
+
+      main h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #ffffff;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      form label {
+        display: flex;
+        flex-direction: column;
+        font-weight: bold;
+        font-size: 14px;
+        color: #ffffff;
+      }
+
+      form label span {
+        margin-bottom: 8px;
+      }
+
+      form input {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #1c1c1c;
+        color: #ffffff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      form input:focus {
+        border-color: #ffffff;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+
+      .login-button {
+        padding: 12px;
+        background: #00b36b;
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .login-button:hover {
+        background: #009955;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
+      }
+
+      .signup-director-container {
+        text-align: center;
+      }
+      .signup-director {
+        color: #00b36b;
+        font-weight: bold;
+      }
+      .signup-director:hover {
+        color: #009955;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Login</h1>
+      <form method="post">
+        <label for="email">
+          <span>Email:</span>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+          />
+        </label>
+
+        <label for="password">
+          <span>Password:</span>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+          />
+        </label>
+
+        <button class="login-button" type="submit">Login</button>
+      </form>
+      <p signup-director-container>
+        Don't have an account?
+        <a href="/src/pages/auth/signup/" class="signup-director">Sign Up</a>
+      </p>
+    </main>
+    <script type="module" src="script.js">
+            import Fetch from "../../../utils/fetch.js"
+
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const email = formData.get("email").trim();
+        const password = formData.get("password").trim();
+
+        if (!email || !password) {
+          alert("Please fill in all fields");
+          return;
+        }
+
+        const loginData = {
+          email,
+          password
+        };
+
+        const fetching_data = new Fetch('/auth/login');
+        const resp = await fetching_data.postData(loginData);
+
+        console.log("Login Data:", loginData);
+
+        console.log(resp);
+
+        const sessionid = resp["user_data"]["sessionid"]
+        document.cookie = `sessionid=${sessionid};  expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/`
+
+
+
+
+
+        alert(resp["message"]);
+        window.location.replace('/');
+        form.reset();
+      });
+    </script>
+  </body>
 </html>
