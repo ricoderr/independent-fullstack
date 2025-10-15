@@ -1,7 +1,8 @@
 from DB.models.User import CheckUser, SelectUser, UpdateSessionId
 from passlib.hash import argon2
 import secrets
-def handle_login(data): 
+
+def handle_login(data : dict) -> dict: 
     email = data["email"]
     password = data["password"] 
     

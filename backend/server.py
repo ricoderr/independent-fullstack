@@ -3,6 +3,7 @@ import json
 from DB.models.User import InsertUser, SelectUser
 from auth.signup import handle_signup
 from auth.login import handle_login
+from sessions.validation import handle_validation
 
 class MyHandler(BaseHTTPRequestHandler): 
 
@@ -59,6 +60,9 @@ class MyHandler(BaseHTTPRequestHandler):
         
         elif self.path == '/auth/login': 
             response = handle_login(data)
+        
+        elif self.path == '/validate-session': 
+            response = handle_validation(data)
             
         json_response_data = json.dumps(response)
         self._set_headers()

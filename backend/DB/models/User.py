@@ -43,13 +43,13 @@ def InsertUser(username: str, email: str, password: str) -> None:
             }
         
      
-def SelectUser(email: str) -> tuple | None:
+def SelectUser(email: str) -> dict | None:
     with engine.connect() as connection:  
         query = sa.select(user_table).where(user_table.c.email == email)
         result = connection.execute(query)
         return result.mappings().fetchone()
 
-def CheckUser(email: str) -> tuple |None: 
+def CheckUser(email: str) -> bool |None: 
     with engine.connect() as connection: 
         query = sa.select(sa.exists().where(user_table.c.email == email))   
         result = connection.execute(query).scalar()
@@ -60,18 +60,33 @@ def GetAllUsers() -> list[dict]:
         query = user_table.select() 
         result = connection.execute(query)
         return result.mappings().all() 
-
-def UpdateSessionId(id: int, sessionid: str) -> None: 
-    with engine.connect() as connection: 
-        query = sa.update(user_table).where(user_table.c.id == id).values(sessionid = sessionid)
-        connection.execute(query)
-        
+    
 def RemoveUser(id: int) -> None : 
     with engine.connect() as connection: 
         query = user_table.delete().where(user_table.c.id == id)
         connection.execute(query)
         connection.commit()
     
+    
+def CheckSessionId(sessionid : str) -> bool: 
+    with engine.connect() as connection: 
+        query = sa.select(sa.exists().where(user_table.c.sessionid == sessionid))
+        result = connection.execute(query).scalar()
+        return result
+
+def GetSessionData(sessionid: str) -> dict: 
+    with engine.connect() as connection: 
+            query = sa.select(user_table).where(user_table.c.sessionid == sessionid)
+            user_data = connection.execute(query).mappings().fetchone()
+            return user_data
+    
+def UpdateSessionId(id: int, sessionid: str) -> None: 
+    with engine.connect() as connection: 
+        query = sa.update(user_table).where(user_table.c.id == id).values(sessionid = sessionid)
+        connection.execute(query)
+        
+    
+        
 def main() -> None: 
     # This create the db or updates if it is already present.
     metadata.create_all(engine)

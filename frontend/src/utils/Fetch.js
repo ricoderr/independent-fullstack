@@ -21,12 +21,13 @@ export default class Fetch {
     console.error("Error fetching data :(", error);
   }
 
-  async postData(body = {}) {
+  async postData(body = {}, credentials = "include") {
     try {
       const response = await fetch(`${this.BASE_URL}${this.url}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "credentials": credentials, 
         },
         body: JSON.stringify(body),
       });

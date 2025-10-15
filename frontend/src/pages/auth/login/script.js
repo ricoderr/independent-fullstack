@@ -1,4 +1,4 @@
-import Fetch from "../../../utils/Fetch.js"
+import Fetch from "../../../utils/fetch.js"
 
 const form = document.querySelector("form");
 
@@ -28,11 +28,11 @@ form.addEventListener("submit", async (e) => {
 
   const sessionid = resp["user_data"]["sessionid"]
   document.cookie = `sessionid=${sessionid};  expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/`
-
+ 
   
 
 
 
-  alert("Login successful!");
+  alert(resp["message"]);
   form.reset();
 });

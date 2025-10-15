@@ -2,7 +2,7 @@ from DB.models.User import InsertUser
 from passlib.hash import argon2
 
 
-def handle_signup(data): 
+def handle_signup(data : dict) -> dict: 
     
     username = data["username"]
     email = data["email"]
