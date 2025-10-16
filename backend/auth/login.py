@@ -13,6 +13,7 @@ def handle_login(data : dict) -> dict:
             authenticated = argon2.verify(password, user_pass)
             if authenticated: 
                 sessionid = secrets.token_hex(16)
+                print(sessionid)
                 UpdateSessionId(user_data["id"], sessionid=sessionid)
                 return {
                     "method": "POST", 

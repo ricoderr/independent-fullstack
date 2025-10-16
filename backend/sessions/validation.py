@@ -6,10 +6,11 @@ def handle_validation(sessionid : str) -> dict:
         return {
             "method": "POST",
             "status": "Failed",
-            "error": "Missing session ID"
+            "error": f"Missing session ID, sessionid = {sessionid}"
         }
         
     validate = CheckSessionId(sessionid)
+    print(validate) # Debug
     if validate:
         user_data = GetSessionData(sessionid)
         return {
@@ -18,10 +19,10 @@ def handle_validation(sessionid : str) -> dict:
             "user_data": user_data, 
         }
         
-    else: 
-        return {
-            "method": "POST", 
-            "status": "Failed", 
-        }
-        
+     
+    return {
+        "method": "POST", 
+        "status": "Failed", 
+    }
+     
     

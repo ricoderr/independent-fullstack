@@ -66,12 +66,10 @@ class MyHandler(BaseHTTPRequestHandler):
             response = handle_login(data)
 
         elif self.path == '/validate-session': 
-            cookie = SimpleCookie()
-            cookie.load(self.headers.get("Cookie", ""))
-            session_morsel = cookie.get("sessionid")
-            sessionid = session_morsel.value if session_morsel else None
+            sessionid = data["cookies"]["sessionid"]
+            print(f"sessionid = {sessionid}")
 
-            response = handle_validation(sessionid)
+            response = dict(handle_validation(sessionid))
 
         json_response_data = json.dumps(response)
 

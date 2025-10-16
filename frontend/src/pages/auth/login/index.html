@@ -130,46 +130,5 @@
         <a href="/src/pages/auth/signup/" class="signup-director">Sign Up</a>
       </p>
     </main>
-    <script type="module">
-      import Fetch from "../../../utils/fetch.js"
-
-      const form = document.querySelector("form");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const email = formData.get("email").trim();
-        const password = formData.get("password").trim();
-
-        if (!email || !password) {
-          alert("Please fill in all fields");
-          return;
-        }
-
-        const loginData = {
-          email,
-          password
-        };
-
-        const fetching_data = new Fetch('/auth/login');
-        const resp = await fetching_data.postData(loginData);
-
-        console.log("Login Data:", loginData);
-
-        console.log(resp);
-
-        const sessionid = resp["user_data"]["sessionid"]
-        document.cookie = `sessionid=${sessionid};  expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/`
-
-
-
-
-
-        alert(resp["message"]);
-        window.location.replace('/');
-        form.reset();
-      });
-    </script>
   </body>
 </html>

@@ -78,12 +78,13 @@ def GetSessionData(sessionid: str) -> dict:
     with engine.connect() as connection: 
             query = sa.select(user_table).where(user_table.c.sessionid == sessionid)
             user_data = connection.execute(query).mappings().fetchone()
-            return user_data
-    
+            return dict(user_data)
+
 def UpdateSessionId(id: int, sessionid: str) -> None: 
     with engine.connect() as connection: 
         query = sa.update(user_table).where(user_table.c.id == id).values(sessionid = sessionid)
         connection.execute(query)
+        connection.commit()
         
     
         
@@ -97,7 +98,7 @@ def main() -> None:
     # This select a particular user with their id: 
     #print(SelectUser(1))
     
-    # This removes all the users. 
+    #This removes all the users: 
     # for i in range(1,6): 
     #     RemoveUser(i)
         
