@@ -1,25 +1,32 @@
 import Fetch from "./src/utils/fetch.js";
-import LoadTemplate from "./src/utils/loadtemplate.js"
+import LoadTemplate from "./src/utils/loadtemplate.js";
+import Handle_Login from "./src/pages/auth/login/script.js";
 
-const root = document.querySelector('#root'); 
+const root = document.querySelector("#root");
 
 const main = async () => {
-    const fetching_cookies = new Fetch('/validate-session'); 
-    const resp = await fetching_cookies.postData(); 
-    console.log(resp);
-    // resp will have the object of the response sent by the server.
-    
-    // if the sessionid in the cookies sent by the frontend is present in the db
-    // then, server will respond with the data of the user who owns the sessionid. 
-    
-    // else if the sessionid in the cookies sent by the frontend is null 
-    // then, the server will response with status: "Failed" by which the frontend will show the login page in "/" url.
-    if(resp["status"] === "Failed"){
-        root.innerHTML = await LoadTemplate('./src/pages/auth/login'); 
-    }
-    else{
-        root.innerHTML = await LoadTemplate('./src/pages/home.html')
-    }
-}
+  try {
+    const fetching_cookies = new Fetch("/validate-session");
+    const resp = await fetching_cookies.postData();
 
-main(); 
+    console.log("Session response:", resp);
+
+    if (!resp) {
+      root.innerHTML = "<h1>Error: No response from server</h1>";
+      return; 
+    }
+
+    if (resp.status === "Failed") {
+      root.innerHTML = await LoadTemplate("./src/pages/auth/login/index.html");
+
+      Handle_Login();
+    } else {
+      root.innerHTML = await LoadTemplate("./src/pages/home.html");
+    }
+  } catch (err) {
+    console.error("Error in main:", err);
+    root.innerHTML = "<h1>Unexpected Error</h1>";
+  }
+};
+
+document.addEventListener("DOMContentLoaded", main);

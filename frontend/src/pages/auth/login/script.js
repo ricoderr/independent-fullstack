@@ -1,39 +1,48 @@
-import Fetch from "../../../utils/fetch.js"
+import Fetch from "../../../utils/fetch.js";
 
-const form = document.querySelector("form");
+const Handle_Login = () => {
+  const form = document.querySelector("form");
+  if (!form) return; // safety check
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  // Prevent attaching multiple listeners
+  if (form.dataset.listenerAttached) return;
+  form.dataset.listenerAttached = "true";
 
-  const formData = new FormData(form);
-  const email = formData.get("email").trim();
-  const password = formData.get("password").trim();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  if (!email || !password) {
-    alert("Please fill in all fields");
-    return;
-  }
+    const formData = new FormData(form);
+    const email = formData.get("email").trim();
+    const password = formData.get("password").trim();
 
-  const loginData = {
-    email,
-    password
-  };
+    if (!email || !password) {
+      alert("Please fill in all fields");
+      return;
+    }
 
-  const fetching_data = new Fetch('/auth/login'); 
-  const resp = await fetching_data.postData(loginData); 
+    const loginData = { email, password };
 
-  console.log("Login Data:", loginData);
+    try {
+      const fetching_data = new Fetch("/auth/login");
+      const resp = await fetching_data.postData(loginData);
 
-  console.log(resp); 
+      console.log("Login Data:", loginData);
+      console.log(resp);
 
-  const sessionid = resp["user_data"]["sessionid"]
-  document.cookie = `sessionid=${sessionid};  expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/`
- 
-  
+      if (resp.status === "Success" && resp.user_data?.sessionid) {
+        document.cookie = `sessionid=${resp.user_data.sessionid}; expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/; SameSite=Strict`;
+        alert(resp.message || "Login successful");
+        window.location.replace("/"); // reload to home
+      } else {
+        alert(resp.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("An error occurred during login.");
+    }
 
+    form.reset();
+  });
+};
 
-
-  alert(resp["message"]);
-  window.location.replace('/'); 
-  form.reset();
-});
+export default Handle_Login;

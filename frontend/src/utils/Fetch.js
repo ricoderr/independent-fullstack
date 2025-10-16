@@ -21,16 +21,17 @@ export default class Fetch {
     console.error("Error fetching data :(", error);
   }
 
-  async postData(body = {}, credentials = "include") {
+  async postData(body = {}) {
     try {
       const response = await fetch(`${this.BASE_URL}${this.url}`, {
         method: "POST",
-        credentials: credentials, 
+        credentials: "include", 
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
+    
 
       if (!response.ok) {
         throw new Error(`HTTP server error: ${response.status}`);
@@ -39,7 +40,7 @@ export default class Fetch {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Error posting data :(", error);
+      console.error("Error posting data :(", error); 
     }
   }
 }
